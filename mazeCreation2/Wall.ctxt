@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Wall
+comment1.params=s
+comment1.target=Wall(java.lang.String)
+comment2.params=
+comment2.target=java.lang.String\ wallType()
+comment3.params=
+comment3.target=boolean\ isEdge()
+comment4.params=b
+comment4.target=void\ setIsEdge(boolean)
+comment5.params=
+comment5.target=boolean\ drawWall()
+comment6.params=b
+comment6.target=void\ setDrawWall(boolean)
+comment7.params=
+comment7.target=boolean\ isDrawn()
+comment8.params=b
+comment8.target=void\ setIsDrawn(boolean)
+numComments=9
