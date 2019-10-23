@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class Adapter implements RectMaze{
-    public Grid mazeGrid;
+    public mazeCreation2 mazeGrid;
     
-    public Adapter(int numCols, int numRows){
+    public mazeCreation2(int numCols, int numRows){
         System.out.println("New test");
         mazeGrid = new Grid(numCols, numRows);
         mazeGrid.initGrid();
@@ -24,10 +24,7 @@ public class Adapter implements RectMaze{
     }
     
     public ArrayList<DirType> getDirections(int x, int y){
-        ArrayList<DirType> directions = new ArrayList<DirType>();
-        
-        //Get directions list from specified square
-        
+        ArrayList<DirType> directions = new ArrayList<DirType>();    
         Square current = mazeGrid.gridArray[y][x];
         
         if (current.getUpWall().drawWall() == false){

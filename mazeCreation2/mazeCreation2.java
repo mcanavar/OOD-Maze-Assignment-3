@@ -2,40 +2,48 @@ import java.util.Random;
 import java.util.ArrayList;
 import java.util.AbstractSet;
 import java.util.HashSet;
+import java.util.Iterator;
 
-public class Grid{
+public class mazeCreation2 implements RectMaze{
 
-    int x;
-    int y;
-    HashSet<Square> edgeSquares;
+    int x; // Number of columns
+    int y; // Number of rows
+    //HashSet<Square> edgeSquares;
     //Not currently used: may be useful later?
-    HashSet<Wall> mazeWalls;
-    ArrayList<HashSet<Wall>> mazeWallsToPrint;
 
     Square [][] gridArray;
 
     //constructor takes in from square class the square object, number of rows in maze array, number of columns in maze array, 
     //width and length of edge squares.
-    public Grid(int numCols, int numRows){
-
-        x = numCols;
-        y = numRows;
-               
-        edgeSquares = new HashSet<Square>();
-        gridArray = new Square[numRows][numCols];
-        mazeWalls = new HashSet<Wall>();
-        mazeWallsToPrint = new ArrayList<HashSet<Wall>>();
+    public mazeCreation2(int y, int x){
+        this.x = x;
+        this.y = y;
+        //edgeSquares = new HashSet<Square>();
+        gridArray = new Square[y][x];
+        initMaze();
+        determineNeighbours();
+        determineWallsAll();
+        
+        HashSet<Square> edgeSquares = findEdgeSquares();
+        determineEdgeSquares(edgeSquares);
+        
+        
     }
 
-    public int getNumCols(){
+    /*
+    public void createMaze(int y, int x){
+        
+    }
+    */
+    public int getMaxX(){
         return x;
     }
     
-    public int getNumRows(){
+    public int getMaxY(){
         return y;
     }
     //this method initializes the squareArray
-    public void initGrid(){
+    public void initMaze(){
         
         for(int i=0; i<y; i++){
             for(int j=0; j<x; j++){
@@ -47,7 +55,7 @@ public class Grid{
             }
         }
     
-    public void determineNeighbours(){
+    private void determineNeighbours(){
     /* This function looks at every square in the grid and assigns its neighbours
      * by looking at squares with nearby indexes. */ 
         for(int i=0; i<y; i++){
@@ -75,7 +83,7 @@ public class Grid{
     }
 }
 
-public void determineWallsAll(){
+private void determineWallsAll(){
     /*This function creates and determines walls
        It works by looping through each row, then each square in the row
        It assigns walls to the squares in the row
@@ -147,7 +155,7 @@ public void determineWallsAll(){
     }
 }
 
-public void determineWallsRandom(){
+private void determineWallsRandom(){
     /*This function creates and determines walls
        It works by looping through each row, then each square in the row
        It assigns walls to the squares in the row
@@ -246,85 +254,75 @@ if (randomNum == 1){
        }
 }
 
-public void drawWalls(){
+private void determineEdgeSquares(HashSet<Square> edgeSquares){
     for(int i=0; i<y; i++){
-        HashSet<Wall> rowTopWalls = new HashSet<Wall>();
-        HashSet<Wall> rowVerticalWalls = new HashSet<Wall>();
-        HashSet<Wall> rowBottomWalls = new HashSet<Wall>();
-        
             for(int j=0; j<x; j++){
-                Square current = gridArray[i][j];
-                rowTopWalls.add(current.getUpWall());
-                rowBottomWalls.add(current.getDownWall());
-                rowVerticalWalls.add(current.getLeftWall());
-                rowVerticalWalls.add(current.getRightWall());     
+                Square thisSquare = gridArray[i][j];
+                Wall[] thisSquareWalls = thisSquare.getWalls();
+                
+                if(!edgeSquares.contains(thisSquare)){
+                    for (Wall w: thisSquareWalls){
+                        w.setDrawWall(false);
+                    }
                 }
-        
-        for (Wall w: rowTopWalls){
-            drawWall(w);
-        }        
-        System.out.println("");
-        
-        for (Wall w: rowVerticalWalls){
-            drawWall(w);
-        }
-        System.out.println("");
-        
-        if (i == y-1){
-            for (Wall w: rowBottomWalls){
-            drawWall(w);
-            }
-        }   
     }
 }
+}
 
-private void drawWall(Wall w){
-    if (w.drawWall()){
-       if (w.wallType == "Horizontal"){
-           System.out.print(" * ");
-       }   
-       if (w.wallType == "Vertical"){
-           System.out.print("|  ");
-       }
-    } else {
-        System.out.print("   ");
-    }
-}        
-        
-
-public Square[][] passGrid(){
-
-        return gridArray;
-
-    }
-    
-    public HashSet<Square> findEdgeSquares() {
+private HashSet<Square> findEdgeSquares() {
         // x is number of rows and y is number of columns. 
         // x-1 and y-1 should correspond with the indexes for the grid, since indexes start at 0
         // i.e., there may be three columns, but squares in the last column are accessed as Square[2][i]
+        HashSet<Square> edgeSquares = new HashSet<Square>();
         
-        for(int row = 0; row < x-1; row++)
-        {
-            for(int column = 0; column < y-1; column++) {
-                
-                //Will this add the correct edge squares?
-                //Aparently HashSets don't allow for duplicat elements to be added
-                if((row == 0) || (column == 0) || (row == x-1) || (row == y-1)) {
-                    edgeSquares.add(gridArray[x][y]);
-                }
-            }
-        }
-        
-        return edgeSquares;
-    }
-
-    public void printWallInfoAll(){
         for(int i=0; i<y; i++){
             for(int j=0; j<x; j++){
-                gridArray[i][j].printWallInfo();
+                Square thisSquare = gridArray[i][j];
+                int squareX = thisSquare.getX();
+                int squareY = thisSquare.getY();
+                if ((squareX == 0) || (squareY == 0) || (squareX == x-1) || (squareY == y-1)){
+                    edgeSquares.add(thisSquare);
                 }
             }
-        }
+    }
+    return edgeSquares;
+}
+private ArrayList<Square> endAndStartSquares(HashSet<Square> edgeSquares){
+    ArrayList endAndStartSquares = new ArrayList();
     
+    Iterator<Square> iterateEdgeSquares = edgeSquares.iterator();
+    
+    Square startSquare = iterateEdgeSquares.next();
+    Square endSquare = iterateEdgeSquares.next();
+    
+    endAndStartSquares.add(startSquare);
+    endAndStartSquares.add(endSquare);
+    
+    return endAndStartSquares;
+    
+}
+    
+public ArrayList<DirType> getDirections(int x, int y){
+        ArrayList<DirType> directions = new ArrayList<DirType>();    
+        Square current = gridArray[y][x];
+        
+        if (current.getUpWall().drawWall() == false){
+            directions.add(DirType.North);
+        }
+        
+        if (current.getDownWall().drawWall() == false){
+            directions.add(DirType.South);
+        }
+        
+        if (current.getLeftWall().drawWall() == false){
+            directions.add(DirType.West);
+        }
+        
+        if (current.getRightWall().drawWall() == false){
+            directions.add(DirType.East);
+        }
+        
+        return directions;
+    }
    
 }
