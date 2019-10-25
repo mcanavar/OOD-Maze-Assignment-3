@@ -27,7 +27,7 @@ public class MazeApplication extends Application{
     //Here is where the maze is created
     //... Replace TestMaze with a class you have created!
     void displayTheMaze(){
-	the_maze = new mazeCreation2(6, 4);
+	the_maze = new mazeCreation2(10, 10);
 	
 
         //You can un-comment these two lines to change the scale of the maze
