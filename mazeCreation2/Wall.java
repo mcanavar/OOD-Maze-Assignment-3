@@ -3,9 +3,8 @@ public class Wall
     boolean isEdge;
     boolean drawWall;
     boolean isPath;
-    boolean isDrawn;
+    boolean drawDetermined;
     String wallType;
-    //Square nextSquare;
     
     public Wall(String s)
     {
@@ -13,9 +12,9 @@ public class Wall
         
         this.isEdge = false;
         this.drawWall = false;
-        this.isDrawn = false;
+        this.drawDetermined = false;
         this.wallType = s;
-        //isPath = false;
+        isPath = false;
         
     }
     
@@ -39,14 +38,14 @@ public class Wall
         this.drawWall = b;
     }
     
-    public boolean isDrawn(){
-        return isDrawn;
+    public boolean drawDetermined(){
+        return drawDetermined;
     }
     
-    public void setIsDrawn(boolean b){
-        this.isDrawn = b;
+    public void setDrawDetermined(boolean b){
+        this.drawDetermined = b;
     }
-    /*
+    
     public boolean isPath(){
         return isPath;
     }
@@ -54,7 +53,7 @@ public class Wall
     public void setIsPath(boolean b){
         this.isPath = b;
     }
-    
+    /*
     public void setNextSquare (Square s){
         this.nextSquare = s;
     }

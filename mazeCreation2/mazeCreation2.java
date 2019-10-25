@@ -3,15 +3,18 @@ import java.util.ArrayList;
 import java.util.AbstractSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Stack;
 
 public class mazeCreation2 implements RectMaze{
 
     int x; // Number of columns
     int y; // Number of rows
-    //HashSet<Square> edgeSquares;
-    //Not currently used: may be useful later?
 
     Square [][] gridArray;
+    Square startSquare;
+    Square endSquare;
+    Square playerSquare;
+    ArrayList<Square> path;
 
     //constructor takes in from square class the square object, number of rows in maze array, number of columns in maze array, 
     //width and length of edge squares.
@@ -22,17 +25,52 @@ public class mazeCreation2 implements RectMaze{
         gridArray = new Square[y][x];
         initMaze();
         determineNeighbours();
-        determineWallsAll();
+        createWalls();
         
         HashSet<Square> edgeSquares = findEdgeSquares();
-        determineEdgeSquares(edgeSquares);
+        ArrayList<Square> importantSquares = endAndStartSquares(edgeSquares);
+        startSquare = importantSquares.get(0);
+        endSquare = importantSquares.get(1);
         
+        System.out.println("Start square: " + startSquare.getY() + ", " + startSquare.getX());
+        System.out.println("End square: " + endSquare.getY() + ", " + endSquare.getX());
+        
+        playerSquare = null;
+        
+        path = getPath(startSquare, endSquare);
+        
+        System.out.println("Path");
+        for (Square s: path){
+            System.out.println(s.getY() + ", " + s.getX());
+        }
+        
+        determineIsPath();
+        determineDrawWalls();
         
     }
-
+    
+    void setPos(int y, int x){
+        Square formerPlayerSquare = playerSquare;
+        formerPlayerSquare.setHasPlayer(false);
+        playerSquare = gridArray[y][x];
+        playerSquare.setHasPlayer(true);
+    }
+    
+    public Integer[] startPoint(){
+        Integer[] startPoint = new Integer[2];
+        startPoint[0] = startSquare.getY();
+        startPoint[1] = startSquare.getX();
+        return startPoint;
+    }
+    
+    public Integer[] endPoint(){
+        Integer[] endPoint = new Integer[2];
+        endPoint[0] = endSquare.getY();
+        endPoint[1] = endSquare.getX();
+        return endPoint;
+    }
     /*
-    public void createMaze(int y, int x){
-        
+    public void createMaze(int y, int x){  
     }
     */
     public int getMaxX(){
@@ -83,13 +121,13 @@ public class mazeCreation2 implements RectMaze{
     }
 }
 
-private void determineWallsAll(){
+private void createWalls(){
     /*This function creates and determines walls
        It works by looping through each row, then each square in the row
        It assigns walls to the squares in the row
        If squares share walls, then it assigns a reference to that wall object to the square
        So, a square's left wall will be the previous square's right wall
-       It also makes sure you always draw walls that are on the border
+       It also marks walls on the border so you draw them later
        */
     for(int i=0; i<y; i++){
             for(int j=0; j<x ; j++){
@@ -137,114 +175,35 @@ private void determineWallsAll(){
                     s.setRightWall(new Wall("Vertical"));  
                 }
                 
-                //Only set drawWall for up wall if upSquare doesn't exist
-                if (!upSquareB){  
-                    s.getUpWall().setDrawWall(true);  
-                }
-                
-                s.getDownWall().setDrawWall(true);
-                
-                //Only set drawWall for left wall if left square doesn't exist
-                if (!leftSquareB){
-                     s.getLeftWall().setDrawWall(true);
-               }
-                
-               //Always set drawWall for right wall
-                s.getRightWall().setDrawWall(true);
-            }
-    }
-}
-
-private void determineWallsRandom(){
-    /*This function creates and determines walls
-       It works by looping through each row, then each square in the row
-       It assigns walls to the squares in the row
-       If squares share walls, then it assigns a reference to that wall object to the square
-       So, a square's left wall will be the previous square's right wall
-       It also makes sure you always draw walls that are on the border
-       */
-    for(int i=0; i<y; i++){
-            for(int j=0; j<x ; j++){
-                Square s = gridArray[i][j];
-                boolean leftSquareB = false;
-                boolean upSquareB = false;
-                Square leftSquare = new Square();
-                Square upSquare = new Square();
-                
-                if (j-1 >= 0){
-                    leftSquare = gridArray[i][j-1];
-                    leftSquareB = true;
-                }
-                
-                if (i-1 >= 0){
-                    upSquare = gridArray[i-1][j];
-                    upSquareB = true;
-                }
-                //The first square is the only square that needs 4 unique walls
-                if (j == 0 && i == 0){
-                    s.setUpWall(new Wall("Horizontal"));
-                    s.setDownWall(new Wall("Horizontal"));
-                    s.setLeftWall(new Wall("Vertical"));
-                    s.setRightWall(new Wall("Vertical"));
-                }
-                
-                if (leftSquareB && upSquareB){
-                    s.setUpWall(upSquare.getDownWall());
-                    s.setLeftWall(leftSquare.getRightWall());
-                    s.setDownWall(new Wall("Horizontal"));
-                    s.setRightWall(new Wall("Vertical"));
-                }
-                
-                if (leftSquareB && !upSquareB){
-                    s.setLeftWall(leftSquare.getRightWall());
-                    s.setUpWall(new Wall("Horizontal"));
-                    s.setDownWall(new Wall("Horizontal"));
-                    s.setRightWall(new Wall("Vertical"));
-                }
-                
-                if (!leftSquareB && upSquareB){
-                    s.setUpWall(upSquare.getDownWall());
-                    s.setDownWall(new Wall("Horizontal"));
-                    s.setLeftWall(new Wall("Vertical"));
-                    s.setRightWall(new Wall("Vertical"));  
-                }
-                
-                //Only set drawWall for up wall if upSquare doesn't exist
+                //Only set isEdge for up wall if upSquare doesn't exist
                 if (!upSquareB){
                     if (i == 0){
-                        s.getUpWall().setDrawWall(true);
-                    } else {
-                        setRandomDrawWall(s.getUpWall());
+                        s.getUpWall().setIsEdge(true);
                     }
                 }
-                
-                //Always set drawWall for down wall
+                //Always set isEdge for down wall
                 if (i == y-1){
-                    s.getDownWall().setDrawWall(true);
-                } else {
-                    setRandomDrawWall(s.getDownWall());
-                }
+                    s.getDownWall().setIsEdge(true);
+                } 
                 
-                //Only set drawWall for left wall if left square doesn't exist
+                //Only set isEdge for left wall if left square doesn't exist
                 if (!leftSquareB){
                     if (j == 0) {
-                        s.getLeftWall().setDrawWall(true);
-                    } else {
-                        setRandomDrawWall(s.getLeftWall());
+                        s.getLeftWall().setIsEdge(true);
                     }
                }
                 
-               //Always set drawWall for right wall
+               //Always set isEdge for right wall
                 if (j == x-1){
                     s.getRightWall().setDrawWall(true);
-                } else {
-                    setRandomDrawWall(s.getRightWall());
-                }
+                } 
             }
     }
 }
 
 private void setRandomDrawWall(Wall w){
+    w.setDrawWall(true);
+    /*
 Random rand = new Random();
 int randomNum = rand.nextInt(2);
 if (randomNum == 1){
@@ -252,6 +211,7 @@ if (randomNum == 1){
 } else {
     w.setDrawWall(false);
        }
+       */
 }
 
 private void determineEdgeSquares(HashSet<Square> edgeSquares){
@@ -325,4 +285,100 @@ public ArrayList<DirType> getDirections(int x, int y){
         return directions;
     }
    
+    private ArrayList<Square> getPath(Square start, Square end){
+        ArrayList<Square> path = new ArrayList();
+        Stack<Square> stack = new Stack<Square>();
+        stack.add(start);
+        
+        while (!stack.isEmpty()){
+            Square current = stack.pop() ;
+            if (!current.isVisited()){
+                current.setIsVisited(true);
+                path.add(current);
+                //Break out of dfs if the square you visit is the end
+                if (current == end){
+                    break;
+                }
+            }
+            
+            Square[] neighbours = current.getNeighbours();
+            for (int i=0; i<4; i++){
+                Square n = neighbours[i];
+                if (n!=null && !n.isVisited()){
+                    stack.add(n);
+                }
+            }
+        }
+        
+        return path;
+    }
+    
+    private void determineIsPath(){
+        
+        for (int i = 0; i < path.size()-1; i++){
+            Square current = path.get(i);
+            
+            if (i == path.size()){
+                for (Wall w: current.getWalls()){
+                    if (w.isEdge()){
+                        w.setIsPath(true);
+                        w.setIsEdge(false);
+                        //Don't draw the edges of the end square
+                    }
+                }
+                break;               
+            }
+
+            Square next = path.get(i+1); // out of bounds exception
+            
+            if (i == 0){
+                for (Wall w: current.getWalls()){
+                    if (w.isEdge()){
+                        w.setIsPath(true);
+                        w.setIsEdge(false);
+                        //Don't draw the edges of the start square
+                    }
+                }
+            }
+
+            if (current.getUpSquare() == next){
+                current.getUpWall().setIsPath(true);
+            }
+            
+            if (current.getDownSquare() == next){
+                current.getDownWall().setIsPath(true);
+            }
+            
+            if (current.getLeftSquare() == next){
+                current.getLeftWall().setIsPath(true);
+            }
+            
+            if (current.getRightSquare() == next){
+                current.getRightWall().setIsPath(true);
+            }
+        }
+    }
+    
+    private void determineDrawWalls(){
+        for(int i=0; i<y; i++){
+            for(int j=0; j<x; j++){
+                Square current = gridArray[i][j];
+                for (Wall w: current.getWalls()){
+                    if (!w.drawDetermined){
+                        if (w.isEdge()){
+                            w.setDrawWall(true);
+                        }
+                        if (w.isPath()){
+                            w.setDrawWall(false);
+                        }
+                        if (!w.isPath() && !w.isEdge()){
+                            setRandomDrawWall(w);
+                        }
+                        w.setDrawDetermined(true);
+                    }
+                }
+            }
+        }
+        
+    }
 }
