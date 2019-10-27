@@ -214,7 +214,7 @@ public class mazeCreation2 implements RectMaze{
            }       
     }
 
-    // Returns a hashSet of edgeSquares based on the Square's x and y positions
+    // Returns a hashSet of edgeSquares
     private HashSet<Square> findEdgeSquares() {
         
         HashSet<Square> edgeSquares = new HashSet<Square>();
