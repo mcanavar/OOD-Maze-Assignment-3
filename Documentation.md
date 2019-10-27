@@ -62,7 +62,7 @@ Includes all the methods in the maze interface
 <b> Returns: </b> void
 
 ### createWalls() [private]
-<b> Description: This function creates and determines walls. It works by looping through the Square array. It assigns walls to the squares in the row. If squares share walls, then it assigns a reference to that wall object to the square. So, a square's left wall will be the previous square's right wall. It also marks walls on the border so they get drawn later.
+<b> Description: </b> This function creates and determines walls. It works by looping through the Square array. It assigns walls to the squares in the row. If squares share walls, then it assigns a reference to that wall object to the square. So, a square's left wall will be the previous square's right wall. It also marks walls on the border so they get drawn later.
 <b> Parameters: </b> none
 <b> Returns: </b> void
 
@@ -92,7 +92,7 @@ Includes all the methods in the maze interface
 <b> Returns: </b> void
 
 ### determineDrawWalls() [private]
-<b> Description: </b> / Determines whether or not to draw Walls. If a wall is a edge, draw it. If a wall is part of the path, don't draw it. Else, draw walls randomly.
+<b> Description: </b> Determines whether or not to draw Walls. If a wall is a edge, draw it. If a wall is part of the path, don't draw it. Else, draw walls randomly.
 <b> Parameters: </b> none
 <b> Returns: </b> void
 
