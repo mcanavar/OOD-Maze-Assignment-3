@@ -1,19 +1,18 @@
 public class Wall
 {
     boolean isEdge;
-    boolean drawWall;
+    boolean drawWall; // Determines if you should draw the wall
     boolean isPath;
-    boolean drawDetermined;
+    boolean drawDetermined; // Determines if you've assigned drawWall or if it still defaults to False
     String wallType;
     
     public Wall(String s)
     {
-        /* Booleans default to false if they haven't been set. Is this ideal? */ 
         
-        this.isEdge = false;
-        this.drawWall = false;
-        this.drawDetermined = false;
-        this.wallType = s;
+        isEdge = false;
+        drawWall = false;
+        drawDetermined = false;
+        wallType = s;
         isPath = false;
         
     }
@@ -53,12 +52,4 @@ public class Wall
     public void setIsPath(boolean b){
         this.isPath = b;
     }
-    /*
-    public void setNextSquare (Square s){
-        this.nextSquare = s;
-    }
-   
-    public Square getNextSquare (){
-       return nextSquare;
-    } */
 }

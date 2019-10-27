@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Square
 {
-    boolean isVisited;
+    boolean isVisited; // Used for dfs in determining a path through the maze
     boolean isPath;
     boolean hasPlayer;
     int xPos;
@@ -79,14 +79,6 @@ public class Square
         neighbours[3] = s;
     }
     
-    public void setNeighbourSquareIndex(int i, Square s){
-        neighbours[i] = s;
-    }
-    
-    public Square getNeighbourSquareIndex(int i){
-        return neighbours[i];
-    }
-    
     public Wall[] getWalls(){
         return walls;
     }
@@ -139,20 +131,12 @@ public class Square
         return walls[3];
     }
     
-    public void setWallIndex(int i, Wall w){
-        walls[i] = w;
-    }
-    
     public Square[] getNeighbours(){
        return neighbours;
     }
-        
-    public Wall getWallIndex(int i){
-        return walls[i];
-    }
-    
+   
+    //Used for debugging to see how the walls are behaving
     public void printWallInfo(){
-        //Used for debugging to see how the walls are behaving
         System.out.println("This is square [" + this.getY() + "][" + this.getX() + "]");
         System.out.println("Up wall: " + this.getUpWall() + " drawWall " +this.getUpWall().drawWall() );
         System.out.println("Down wall: " + this.getDownWall() + " drawWall " +this.getDownWall().drawWall());
