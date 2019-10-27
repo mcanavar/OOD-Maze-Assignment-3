@@ -21,8 +21,11 @@ To edit the code, make changes to the MazeApplication file. Go to the method dis
 ## Contributors
 
 Daniel Dykiel
+
 Aaliyah Lawson
+
 Alexander Sadosky
+
 Davyd Zakorchennyi
 
 ## Questions?
