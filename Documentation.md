@@ -173,7 +173,7 @@ Includes all the methods in the maze interface
 
 ### setIsVisited()
 
-<b> Description: <b> Set boolean isVisited()
+<b> Description: </b> Set boolean isVisited()
   
 <b> Parameters: </b> boolean b
 
