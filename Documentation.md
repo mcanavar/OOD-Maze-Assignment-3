@@ -191,7 +191,7 @@ Includes all the methods in the maze interface
 
 ### setIsVisited()
 
-<b> Description: Set boolean isPath()
+<b> Description: </b> Set boolean isPath()
   
 <b> Parameters: </b> boolean b
 
@@ -495,6 +495,4 @@ Includes all the methods in the maze interface
 ## MazeCreation1
 
 MazeCreation1 takes in an x and y value and produces a randomly generated maze using a 2D array. It goes through two for loops (one for rows and one for columns) and fills them depending on the part of the maze. The loops then edit the filled array by randomly removing marks from the array and replacing them with blank spaces. The loop also finds a path that starts at the top left corner and ends randomly on the bottom of the maze or the right side of the maze. It does this by keeping track of variables that hold a certain point of the array. Once a certain point is met in the loop, it will decide where to go at random and update the variables to repeat the process.
-
-
 
