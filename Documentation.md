@@ -34,7 +34,7 @@
 
 <b> Description: </b> Returns a list of directions you can go from a certain position in the maze
 
-<b> Parameters: </b> int y (current position y), int x (current position x)
+<b> Parameters: </b> int x (current position x), int y (current position y)
 
 <b> Returns: </b> list of dirType
 
