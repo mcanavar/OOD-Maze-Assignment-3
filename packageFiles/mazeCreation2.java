@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Stack;
 
-public class mazeCreation2 implements RectMaze{
+public class mazeCreation2 implements Maze, RectMaze{
 
     int x; // Number of columns
     int y; // Number of rows
@@ -51,13 +51,19 @@ public class mazeCreation2 implements RectMaze{
     }
     
     // Sets the player position on a Square at location y, x
-    void setPos(int y, int x){
+    public void setPos(int y, int x){
         Square formerPlayerSquare = playerSquare;
         formerPlayerSquare.setHasPlayer(false);
         playerSquare = gridArray[y][x];
         playerSquare.setHasPlayer(true);
     }
     
+    public Integer[] playerPos(){
+        Integer[] playerPos = new Integer[2];
+        playerPos[0] = playerSquare.getY();
+        playerPos[1] = playerSquare.getX();
+        return playerPos;
+    }
     // Returns the y and x positions of the startSquare
     // Must be called after findEdgeSquares() and startAndEndSquare()
     public Integer[] startPoint(){

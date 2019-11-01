@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Stack;
 
-public class mazeCreation2 implements RectMaze{
+public class mazeCreation2 implements Maze, RectMaze{
 
     int x; // Number of columns
     int y; // Number of rows
@@ -51,13 +51,19 @@ public class mazeCreation2 implements RectMaze{
     }
     
     // Sets the player position on a Square at location y, x
-    void setPos(int y, int x){
+    public void setPos(int y, int x){
         Square formerPlayerSquare = playerSquare;
         formerPlayerSquare.setHasPlayer(false);
         playerSquare = gridArray[y][x];
         playerSquare.setHasPlayer(true);
     }
     
+    public Integer[] playerPos(){
+        Integer[] playerPos = new Integer[2];
+        playerPos[0] = playerSquare.getY();
+        playerPos[1] = playerSquare.getX();
+        return playerPos;
+    }
     // Returns the y and x positions of the startSquare
     // Must be called after findEdgeSquares() and startAndEndSquare()
     public Integer[] startPoint(){
@@ -214,7 +220,7 @@ public class mazeCreation2 implements RectMaze{
            }       
     }
 
-    // Returns a hashSet of edgeSquares
+    // Returns a hashSet of edgeSquares based on the Square's x and y positions
     private HashSet<Square> findEdgeSquares() {
         
         HashSet<Square> edgeSquares = new HashSet<Square>();
@@ -319,6 +325,7 @@ public class mazeCreation2 implements RectMaze{
             
             //Break out of loop if you've reached the end square
             if (i == path.size() - 1){
+                System.out.println("Reached i == path.size() - 1");
                 for (Wall w: current.getWalls()){
                     if (w.isEdge()){
                         w.setIsPath(true);
@@ -371,207 +378,4 @@ public class mazeCreation2 implements RectMaze{
         }
         
     }
-
-private class Square
-{
-    boolean isVisited; // Used for dfs in determining a path through the maze
-    boolean isPath;
-    boolean hasPlayer;
-    int xPos;
-    int yPos;
-    Square[] neighbours;
-    /* Pos 0 is up, 1 is down, 2 is left, 3 is right */
-    Wall[] walls;
-    /* Pos 0 is up, 1 is down, 2 is left, 3 is right */
-    
-    public Square()
-    {
-        this.isVisited = false;
-        this.isPath = false;
-        this.xPos = -1;
-        this.yPos = -1;
-        this.neighbours = new Square[4];
-        this.walls = new Wall[4];
-
-    }
-    
-    public boolean isVisited(){
-        return isVisited;
-    }
-    
-    public void setIsVisited(boolean b){
-        this.isVisited = b;
-    }
-    
-    public boolean isPath(){
-        return isPath;
-    }
-    
-    public void setIsPath(boolean b){
-        this.isPath = b;
-    }
-    
-    public boolean hasPlayer(){
-        return hasPlayer;
-    }
-    
-    public void setHasPlayer(boolean b){
-        this.hasPlayer = b;
-    }
-    
-    public void setX(int x) {
-        this.xPos = x;   
-    }
-    
-    public void setY(int y) {
-        this.yPos = y;   
-    }
-    
-    public int getX() {
-        return xPos;   
-    }
-    
-    public int getY() {
-        return yPos;   
-    }
-    
-    public void setUpSquare(Square s){
-        neighbours[0] = s;
-    }
-    
-    public void setDownSquare(Square s){
-        neighbours[1] = s;
-    }
-    
-    public void setLeftSquare(Square s){
-        neighbours[2] = s;
-    }
-    
-    public void setRightSquare(Square s){
-        neighbours[3] = s;
-    }
-    
-    public Wall[] getWalls(){
-        return walls;
-    }
-    
-    public Square getUpSquare(){
-        return neighbours[0];
-    }
-    
-    public Square getDownSquare(){
-        return neighbours[1];
-    }
-    
-    public Square getLeftSquare(){
-        return neighbours[2];
-    }
-    
-    public Square getRightSquare(){
-        return neighbours[3];
-    }
-    
-    public void setUpWall(Wall w){
-        walls[0] = w;
-    }
-    
-    public void setDownWall(Wall w){
-        walls[1] = w;
-    }
-    
-    public void setLeftWall(Wall w){
-        walls[2] = w;
-    }
-    
-    public void setRightWall(Wall w){
-        walls[3] = w;
-    }
-    
-    public Wall getUpWall(){
-        return walls[0];
-    }
-    
-    public Wall getDownWall(){
-        return walls[1];
-    }
-    
-    public Wall getLeftWall(){
-        return walls[2];
-    }
-    
-    public Wall getRightWall(){
-        return walls[3];
-    }
-    
-    public Square[] getNeighbours(){
-       return neighbours;
-    }
-   
-    //Used for debugging to see how the walls are behaving
-    public void printWallInfo(){
-        System.out.println("This is square [" + this.getY() + "][" + this.getX() + "]");
-        System.out.println("Up wall: " + this.getUpWall() + " drawWall " +this.getUpWall().drawWall() );
-        System.out.println("Down wall: " + this.getDownWall() + " drawWall " +this.getDownWall().drawWall());
-        System.out.println("Left wall: " + this.getLeftWall() +  " drawWall " +this.getLeftWall().drawWall());
-        System.out.println("Right Wall: " + this.getRightWall()  + " drawWall " +this.getRightWall().drawWall() );
-    }
-}
-
-private class Wall
-{
-    boolean isEdge;
-    boolean drawWall; // Determines if you should draw the wall
-    boolean isPath;
-    boolean drawDetermined; // Determines if you've assigned drawWall or if it still defaults to False
-    String wallType;
-    
-    public Wall(String s)
-    {
-        
-        isEdge = false;
-        drawWall = false;
-        drawDetermined = false;
-        wallType = s;
-        isPath = false;
-        
-    }
-    
-    public String wallType(){
-        return wallType;
-    }
-    
-    public boolean isEdge(){
-        return isEdge;
-    }
-    
-    public void setIsEdge(boolean b){
-        this.isEdge = b;
-    }
-    
-    public boolean drawWall(){
-        return drawWall;
-    }
-    
-    public void setDrawWall(boolean b){
-        this.drawWall = b;
-    }
-    
-    public boolean drawDetermined(){
-        return drawDetermined;
-    }
-    
-    public void setDrawDetermined(boolean b){
-        this.drawDetermined = b;
-    }
-    
-    public boolean isPath(){
-        return isPath;
-    }
-    
-    public void setIsPath(boolean b){
-        this.isPath = b;
-    }
-}
-
-
 }

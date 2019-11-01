@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.target=Maze
+comment1.params=
+comment1.target=int\ getMaxX()
+comment2.params=
+comment2.target=int\ getMaxY()
+comment3.params=
+comment3.target=java.util.List\ getDirections()
+comment4.params=
+comment4.target=java.lang.Integer[]\ startPoint()
+comment5.params=
+comment5.target=java.lang.Integer[]\ endPoint()
+comment6.params=
+comment6.target=java.lang.Integer[]\ playerPos()
+comment7.params=y\ x
+comment7.target=void\ setPos(int,\ int)
+numComments=8
