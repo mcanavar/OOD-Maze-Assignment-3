@@ -1,10 +1,10 @@
-import java.util.ArrayList;
+import java.util.List;
 
 public interface Maze
 {
     int getMaxX();
     int getMaxY();
-    ArrayList<DirType> getDirections(int y, int x);
+    List<DirType> getDirections(int y, int x);
     Integer[] startPoint();
     Integer[] endPoint();
     Integer[] playerPos();
